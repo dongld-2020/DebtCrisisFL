@@ -61,3 +61,16 @@ To perform hyperparameter tuning (Grid Search) to find the best proximal_mu, gam
 ```bash
 python run_experinemt_grid_search.py
 ```
+## 📊 Methodology
+
+**FedNoLoWe** 
+
+(Federated Normalized Loss Weighted) Unlike standard FedAvg which aggregates based on dataset size, FedNoLoWe assigns aggregation weights based on the model's performance on local data. Clients with lower training loss (indicating better learning) contribute more to the global model using a Softmax-based or normalized inverse weighting mechanism.
+
+**Adaptive Focal Loss**
+
+The loss function evolves over time:
+
+$$ FL(p_t) = -\alpha_t (1 - p_t)^{\gamma_t} \log(p_t) $$
+
+Where $\gamma_t$ increases linearly from $\gamma_{min}$ to $\gamma_{max}$ as training progresses, forcing the model to focus harder on difficult samples in later rounds.
