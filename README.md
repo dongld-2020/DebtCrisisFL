@@ -34,10 +34,14 @@ DebtCrisisFL/
 ├── run_experiment.py            # Main script to run a single FL experiment
 ├── run_experinemt_grid_search.py # Script for Grid Search (Hyperparameter tuning)
 └── README.md                    # Project documentation
+```
 ## 🚀 Installation
 
 **1. Clone the repository:**
-
-```bash
 git clone [https://github.com/dongld-2020/DebtCrisisFL.git](https://github.com/dongld-2020/DebtCrisisFL.git)
 cd DebtCrisisFL
+
+**2. Install dependencies:** Ensure you have Python installed, then install the required libraries:
+```bash
+pip install pandas numpy torch scikit-learn openpyxl
+```
