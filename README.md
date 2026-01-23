@@ -45,3 +45,19 @@ cd DebtCrisisFL
 ```bash
 pip install pandas numpy torch scikit-learn openpyxl
 ```
+
+## 🛠️ Usage
+**1. Run a Single Experiment**
+To run a standard Federated Learning experiment with interactive model selection:
+```bash
+python run_experiment.py
+```
+You will be prompted to choose a model (e.g., DeepNN, TransformerNN) and an algorithm (FedProx or FedNoLoWe).
+
+Results (metrics, confusion matrix) will be saved to a CSV file.
+
+**2. Run Grid Search**
+To perform hyperparameter tuning (Grid Search) to find the best proximal_mu, gamma, and scale_factor:
+```bash
+python run_experinemt_grid_search.py
+```
