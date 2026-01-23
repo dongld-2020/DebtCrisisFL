@@ -6,6 +6,14 @@
 
 **DebtCrisisFL** is a research framework designed to predict sovereign debt crises using Federated Learning (FL). This project addresses the challenges of **imbalanced data** in financial datasets by implementing advanced techniques such as **Adaptive Focal Loss** and a novel aggregation strategy called **FedNoLoWe** (Federated Normalized Loss Weighted).
 
+## 📊 Dataset Information
+The dataset is derived from the IMF and World Bank. It includes quarterly time-series data.
+- **File:** `data/raw_data.xlsx`
+- **Samples:** 24,574 observations.
+- **Features:** 26 macroeconomic indicators (e.g., GDP Growth, External Debt, FDI).
+- **Target:** `CrisisIndexTotal` (Binary classification: 0 = No Crisis, 1 = Crisis).
+- **Split:** 80% Training (distributed across 266 clients/countries), 20% Global Testing.
+- 
 ## 🌟 Key Features
 
 * **Algorithms:**
@@ -61,7 +69,7 @@ To perform hyperparameter tuning (Grid Search) to find the best proximal_mu, gam
 ```bash
 python run_experinemt_grid_search.py
 ```
-## 📊 Methodology
+## 🧠 Methodology
 
 **FedNoLoWe** 
 
