@@ -9,8 +9,6 @@ import pathlib
 
 def create_fl_clients(input_file, output_file, test_size=0.2):
     """
-    Đọc dữ liệu từ file Excel, tạo tập global test và phân chia dữ liệu còn lại
-    cho từng client dựa trên mã quốc gia. Xuất dữ liệu ra file Excel mới.
 
     Args:
         input_file (str): Tên file Excel (.xlsx) đầu vào.
@@ -31,7 +29,7 @@ def create_fl_clients(input_file, output_file, test_size=0.2):
         if df.shape[1] < 4:
             raise ValueError("Excel file phải có ít nhất 4 cột: Code, 1 cột khác, ≥1 đặc trưng, và nhãn.")
         
-        # 2. Tách nhãn và đặc trưng
+        # 2. Create feature labels
         label_column = df.columns[-1]
         print(f"Cột nhãn được chọn: {label_column}")
         if label_column not in df.columns:
@@ -42,7 +40,7 @@ def create_fl_clients(input_file, output_file, test_size=0.2):
         if features.empty:
             raise ValueError("Không có cột đặc trưng nào được chọn.")
 
-        # 3. Tạo tập kiểm thử toàn cầu
+        # 3. Create global test set 
         X_train, X_test, y_train, y_test = train_test_split(
             features, y, test_size=test_size, random_state=42
         )
@@ -50,14 +48,14 @@ def create_fl_clients(input_file, output_file, test_size=0.2):
         global_test_data = pd.DataFrame(X_test, columns=feature_columns)
         global_test_data[label_column] = y_test
         
-        # Chuẩn hóa dữ liệu đặc trưng
+        # Normalized
         min_vals = global_test_data[feature_columns].min()
         max_vals = global_test_data[feature_columns].max()
         range_vals = max_vals - min_vals
         range_vals[range_vals == 0] = 1
         global_test_data[feature_columns] = (global_test_data[feature_columns] - min_vals) / range_vals
 
-        # 4. Phân chia dữ liệu cho từng client
+        # 4. Split data to each client 
         train_indices = X_train.index
         train_df = df.loc[train_indices].copy()
         client_data_dict = {}
@@ -77,43 +75,44 @@ def create_fl_clients(input_file, output_file, test_size=0.2):
             client_data_dict[client_id] = client_full_df
             print(f"Client '{client_id}': {len(client_df)} mẫu, cột: {list(client_full_df.columns)}")
 
-        # 5. Xuất dữ liệu ra file Excel
+        # 5. Output to Excel
         with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
             global_test_data.to_excel(writer, sheet_name='Global_Test', index=False)
             for client_id, client_df in client_data_dict.items():
                 client_df.to_excel(writer, sheet_name=client_id, index=False)
 
-        print(f"Đã xuất dữ liệu ra file '{output_file}'.")
+        print(f"Output File '{output_file}'.")
 
         return global_test_data, client_data_dict, label_column
 
     except FileNotFoundError:
-        print(f"Lỗi: Không tìm thấy file '{input_file}'. Vui lòng kiểm tra lại.")
+        print(f"Error: file not found '{input_file}'. Please check.")
         return None, None, None
     except Exception as e:
-        print(f"Đã xảy ra lỗi: {e}")
+        print(f"Error: {e}")
         return None, None, None
 
 def plot_stacked_class_distribution(client_data, label_column, save_path):
-    """Vẽ biểu đồ stacked bar cho phân bố lớp."""
+    """stacked bar."""
     try:
         class_dist = {}
         valid_dfs = [df[label_column] for df in client_data.values() if label_column in df.columns]
         if not valid_dfs:
-            print("Không có client nào có cột nhãn hợp lệ để vẽ stacked bar.")
+            print("No client has a valid label column to draw a stacked bar.")
             return
         
         unique_classes = sorted(pd.concat(valid_dfs)[label_column].unique())
         
         for client_id, client_df in client_data.items():
             if label_column not in client_df.columns:
-                print(f"Cảnh báo: Client '{client_id}' không có cột '{label_column}'. Bỏ qua.")
+                print(f"Waring: Client '{client_id}' no column '{label_column}'.")
                 continue
             counts = client_df[label_column].value_counts(normalize=True) * 100
             class_dist[client_id] = [counts.get(cls, 0) for cls in unique_classes]
         
         if not class_dist:
-            print("Không có dữ liệu phân bố lớp để vẽ stacked bar.")
+            print("There is no class distribution data available to draw stacked bars.
+")
             return
         
         dist_df = pd.DataFrame(class_dist, index=[f'Class {cls}' for cls in unique_classes]).T
