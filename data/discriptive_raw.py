@@ -22,7 +22,7 @@ def get_descriptive_stats(input_file):
         print(features_df.describe())
         
         stats_df = features_df.describe()
-        # Xuất thống kê mô tả ra file Excel
+        # Export descriptive statistics to an Excel file.
         stats_df.to_excel("descriptive_stats.xlsx")
         
     except FileNotFoundError:
