@@ -31,5 +31,5 @@ def get_descriptive_stats(input_file):
         print(f"An error occurred: {e}")
 
 # --- Run the function ---
-# Make sure to place your 'data_raw.xlsx' file in the same directory as this script.
-get_descriptive_stats("raw_data.xlsx")
+# Make sure to place your 'raw_data.xlsx' file in the same directory as this script.
+get_descriptive_stats("data_raw.xlsx")
