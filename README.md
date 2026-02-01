@@ -37,6 +37,7 @@ DebtCrisisFL/
 ├── data/
 │   ├── raw_data.xlsx            # Main dataset (Excel format)
 │   ├── data_benchmark.xlsx      # Benchmark data
+│   ├── create_benchmark.py      # Script to create benchmark data from raw data
 │   └── discriptive_raw.py       # Script for data descriptive analysis
 ├── outcomes/                    # Directory to store experiment results and logs
 ├── run_experiment.py            # Main script to run a single FL experiment
