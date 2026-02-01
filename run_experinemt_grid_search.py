@@ -22,7 +22,7 @@ torch.manual_seed(42)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # File path
-file_path = 'data/raw_data.xlsx'
+file_path = 'data/data_benchmark.xlsx'
 
 # Load data with remapping class 2,3 to 1
 xl = pd.ExcelFile(file_path)
